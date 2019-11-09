@@ -56,3 +56,7 @@ body {
   .doneItem {
     text-decoration: line-through;
   }
+
+  .listCompleted {
+    text-decoration: line-through;
+  }

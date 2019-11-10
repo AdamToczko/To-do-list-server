@@ -8,9 +8,9 @@ let editList;
 let mainInput;
 let addItem;
 let form;
-let currentId = 0;
+// let currentId = 0;
 let currentItem;
-
+let loader;
 
 function main() {
   prepareDOMElements();
@@ -28,7 +28,8 @@ function prepareDOMElements() {
   editList = document.querySelector("#acceptTodo");
   mainInput = document.getElementById('myInput');
   addItem = document.getElementById('addTodo'); // do serwera wylaczyc
-  form = document.getElementById('addForm')
+  form = document.getElementById('addForm');
+  loader = document.querySelector('.loaderBox');
 }
 
 function prepareDOMEvents() {
@@ -54,36 +55,122 @@ function addNewTodo() {
 }
 
 
-function prepareInitialList() {
-  // Tutaj utworzymy sobie początkowe todosy. Mogą pochodzić np. z tablicy
-  initialList.forEach(todo => {
-    addNewElementToList(todo);
-  });
-}
+// DO CZESCI BEZ SERVERA
+// function prepareInitialList() {
+//   // Tutaj utworzymy sobie początkowe todosy. Mogą pochodzić np. z tablicy
+//   initialList.forEach(todo => {
+//     addNewElementToList(todo);
+//   });
+// } 
 
 function getTodosFromServer () {
+  showLoader();
   axios.get('http://195.181.210.249:3000/todo/')
   .then(function (response) {
     response.data.forEach(function(todo) {
-      addNewElementToList(todo.title, todo.id);
-    })
+      addNewElementToList(todo.title, todo.id, todo.extra);
+    });
+  }).catch(function (e) {
+    console.log(`mamy error: ${e}`);
+  }).finally(function () {
+    hideLoader(); 
+  });
+}
+
+
+function removeListElement(event) {
+  // const line = document.querySelector('li[data-id="' + currentItem + '"]');
+  // list.removeChild(line); TO BYLA CZESC NIE SERWEROWA 
+  //tu sie trzeba odwolac do czesci serwerowej 
+
+  removeTodos(event.target.parentElement.querySelector('li').id);
+
+}
+
+function removeTodos (id) {
+  axios.delete('http://195.181.210.249:3000/todo/' + id)
+  .then(function () { 
+    list.innerHTML = '';
+    getTodosFromServer ();
+});
+}
+
+
+// EDIT W CZESCI NIE SERWEROWEJ 
+
+function editListElement(event) {
+  openPopup();
+  // text = document.querySelector('li[data-id="' + currentItem + '"] span').textContent;
+  // popupInput.value = text; TO BYLO DO NIE SERWEROWEJ 
+  //tu sie trzeba polaczyc jakos z funkcja serwerowa ponizej 
+  editTodos(event.target.parentElement.querySelector('li').id);
+}
+
+function editTodos() {
+  list.innerHTML = ""; 
+  axios.put('http://195.181.210.249:3000/todo/' + currentId, {
+    title: mainInput.value
   })
+    .then(function (response) {
+      if (response.status === 200) {
+        getTodosFromServer();
+      }
+    });
 }
 
 
-function addNewElementToList(title   /* Title, author, id */) {
+// MARK AS DONE W WERSJI NIE SERWEROWEJ 
+function markAsDone() {
+  const line3 = document.querySelector('li[data-id="' + currentItem + '"] span');
+  line3.classList.add('listCompleted'); //TO CZESC NIE SERWEROWA  
+ //tu sie trzeba polaczyc jakos z funkcja serwerowa ponizej ??
+  
+}
+
+
+function markToDoAsDoneToServer (id) {
+  axios.put('http://195.181.210.249:3000/todo/' + id, 
+{extra: true})
+   .then(function () { 
+      list.innerHTML = '';
+      getTodosFromServer();
+  }
+)
+}
+
+function showLoader () {
+  loader.classList.add('loaderBoxShow');
+}
+
+function hideLoader () {
+  loader.classList.remove('loaderBoxShow');
+}
+
+
+
+function addNewElementToList(title, id, extra) {
   //obsługa dodawanie elementów do listy
-  // $list.appendChild(createElement('nowy', 2))
-  const newElement = createElement(title);
+  
+  const newElement = createElement(title, id, extra);
   list.appendChild(newElement);
+  
+  // tu dodac czesc serwerowa post??:
+  
+    axios.post('http://195.181.210.249:3000/todo/', {title: mainInput.value})
+      .then(function (response) {
+        if (response.status === 200) {
+          getTodosFromServer();
+        }
+      });
 }
 
-function createElement(title /* Title, author, id */) {
+
+function createElement(title, id, extra) {
   // Tworzyc reprezentacje DOM elementu return newElement
-  currentId++;
+  // currentId++; czesc nie serwerowa 
 
   const newElement = document.createElement('li');
-  newElement.dataset.id = currentId;
+  newElement.id = id;
   const titleElement = document.createElement('span');
   titleElement.innerText = title;
   newElement.appendChild(titleElement);
@@ -104,8 +191,12 @@ function createElement(title /* Title, author, id */) {
   newButton3.classList.add('done')
   newElement.appendChild(newButton3);  // dodajemy przycisk do naszej komórki  
 
-    return newElement;
+  // return newElement;
+//   if (extra == true) {
+//     newList.classList.add('listCompleted');  //CZY TAK JAK BY SIE UDALO USTAWIC MARKED?
+// }
 }
+ 
 
 
 function listClickManager(event) {
@@ -113,7 +204,7 @@ function listClickManager(event) {
  
   currentItem = event.target.parentElement.dataset.id;
   if (event.target.className === 'delete') {
-      removeListElement();
+    removeListElement();
   } else if (event.target.className === 'edit'){
       editListElement();
   } else if (event.target.className === 'done') {
@@ -121,16 +212,14 @@ function listClickManager(event) {
   }
 }
 
-function removeListElement() {
-  const line = document.querySelector('li[data-id="' + currentItem + '"]');
-  list.removeChild(line);
+function editAccept () {
+  const line2 = document.querySelector('li[data-id="' + currentItem + '"] span');
+  
+  line2.innerText = popupInput.value;
+  modalClosed();
 }
 
-function editListElement() {
-  openPopup();
-  text = document.querySelector('li[data-id="' + currentItem + '"] span').textContent;
-  popupInput.value = text;
-}
+
 
 function openPopup() {
     modal.style.display = "block";
@@ -145,17 +234,8 @@ function modalClosed2() {
 }
 
 
-function editAccept () {
-  const line2 = document.querySelector('li[data-id="' + currentItem + '"] span');
-  
-  line2.innerText = popupInput.value;
-  modalClosed();
-}
 
-function markAsDone() {
-  const line3 = document.querySelector('li[data-id="' + currentItem + '"] span');
-  line3.classList.add('listCompleted');
- 
-}
+
+
 
 document.addEventListener('DOMContentLoaded', main);

@@ -27,7 +27,7 @@ function prepareDOMElements() {
   modalClose2 = document.querySelector("#cancelTodo");
   editList = document.querySelector("#acceptTodo");
   mainInput = document.getElementById('myInput');
-  addItem = document.getElementById('addTodo'); // do serwera wylaczyc
+  addItem = document.getElementById('addTodo'); 
   form = document.getElementById('addForm');
   loader = document.querySelector('.loaderBox');
 }
@@ -49,9 +49,17 @@ function addNewItemViaForm (e) {
 
 function addNewTodo() {
   if (mainInput.value.trim() !== ''){
-    addNewElementToList(mainInput.value);
-    mainInput.value = '';
+    // addNewElementToList(mainInput.value);
+    // mainInput.value = '';
+    axios.post('http://195.181.210.249:3000/todo/', {title: mainInput.value})
+      .then(function (response) {
+      if (response.status === 200) {
+      getTodosFromServer();
+    }
+  });
   }
+  
+  
 }
 
 
@@ -65,6 +73,7 @@ function addNewTodo() {
 
 function getTodosFromServer () {
   showLoader();
+  
   axios.get('http://195.181.210.249:3000/todo/')
   .then(function (response) {
     response.data.forEach(function(todo) {
@@ -78,45 +87,48 @@ function getTodosFromServer () {
 }
 
 
-function removeListElement(event) {
-  // const line = document.querySelector('li[data-id="' + currentItem + '"]');
-  // list.removeChild(line); TO BYLA CZESC NIE SERWEROWA 
-  //tu sie trzeba odwolac do czesci serwerowej 
+// function removeListElement(event) {
+//   // const line = document.querySelector('li[data-id="' + currentItem + '"]');
+//   // list.removeChild(line); 
+//   //tu sie trzeba odwolac do czesci serwerowej 
+//   event.target.parentElement.querySelector('li').id
+  
+// #\34 69 
+// #\34 63
+// document.querySelector("#\\34 69")
+// } #\35 32
 
-  removeTodos(event.target.parentElement.querySelector('li').id);
-
-}
-
-function removeTodos (id) {
-  axios.delete('http://195.181.210.249:3000/todo/' + id)
+function removeTodos () {
+  axios.delete(`http://195.181.210.249:3000/todo/${currentItem}`)
   .then(function () { 
-    list.innerHTML = '';
-    getTodosFromServer ();
+    const line = document.querySelector('li[data-id="' + currentItem + '"]');
+    list.removeChild(line); 
 });
 }
 
 
-// EDIT W CZESCI NIE SERWEROWEJ 
-
 function editListElement(event) {
   openPopup();
-  // text = document.querySelector('li[data-id="' + currentItem + '"] span').textContent;
-  // popupInput.value = text; TO BYLO DO NIE SERWEROWEJ 
-  //tu sie trzeba polaczyc jakos z funkcja serwerowa ponizej 
-  editTodos(event.target.parentElement.querySelector('li').id);
+  text = document.querySelector('li[data-id="' + currentItem + '"] span').textContent;
+  popupInput.value = text; 
+  
+  // editTodos(currentItem);
 }
 
-function editTodos() {
-  list.innerHTML = ""; 
-  axios.put('http://195.181.210.249:3000/todo/' + currentId, {
-    title: mainInput.value
+// function editTodos() {
+//   const line = document.querySelector('li[data-id="' + currentItem + '"]');
+  
+//   };
+
+  function editAccept () {
+    const line2 = document.querySelector('li[data-id="' + currentItem + '"] span');
+    const title = popupInput.value;
+    axios.put(`http://195.181.210.249:3000/todo/${currentItem}`, { title })
+  .then(function () { 
+    line2.innerText = title
   })
-    .then(function (response) {
-      if (response.status === 200) {
-        getTodosFromServer();
-      }
-    });
-}
+  modal.style.display = "none";
+  }
 
 
 // MARK AS DONE W WERSJI NIE SERWEROWEJ 
@@ -128,15 +140,15 @@ function markAsDone() {
 }
 
 
-function markToDoAsDoneToServer (id) {
-  axios.put('http://195.181.210.249:3000/todo/' + id, 
-{extra: true})
-   .then(function () { 
-      list.innerHTML = '';
-      getTodosFromServer();
-  }
-)
-}
+// function markToDoAsDoneToServer (id) {
+//   axios.put('http://195.181.210.249:3000/todo/' + id, 
+// {extra: true})
+//    .then(function () { 
+//       list.innerHTML = '';
+//       getTodosFromServer();
+//   }
+// )
+// }
 
 function showLoader () {
   loader.classList.add('loaderBoxShow');
@@ -154,14 +166,7 @@ function addNewElementToList(title, id, extra) {
   const newElement = createElement(title, id, extra);
   list.appendChild(newElement);
   
-  // tu dodac czesc serwerowa post??:
-  
-    axios.post('http://195.181.210.249:3000/todo/', {title: mainInput.value})
-      .then(function (response) {
-        if (response.status === 200) {
-          getTodosFromServer();
-        }
-      });
+
 }
 
 
@@ -170,9 +175,10 @@ function createElement(title, id, extra) {
   // currentId++; czesc nie serwerowa 
 
   const newElement = document.createElement('li');
-  newElement.id = id;
+  newElement.dataset.id = id;
   const titleElement = document.createElement('span');
   titleElement.innerText = title;
+  titleElement.classList.add('styling')
   newElement.appendChild(titleElement);
   
 
@@ -191,7 +197,7 @@ function createElement(title, id, extra) {
   newButton3.classList.add('done')
   newElement.appendChild(newButton3);  // dodajemy przycisk do naszej komórki  
 
-  // return newElement;
+   return newElement;
 //   if (extra == true) {
 //     newList.classList.add('listCompleted');  //CZY TAK JAK BY SIE UDALO USTAWIC MARKED?
 // }
@@ -204,19 +210,12 @@ function listClickManager(event) {
  
   currentItem = event.target.parentElement.dataset.id;
   if (event.target.className === 'delete') {
-    removeListElement();
+    removeTodos ();
   } else if (event.target.className === 'edit'){
       editListElement();
   } else if (event.target.className === 'done') {
       markAsDone();
   }
-}
-
-function editAccept () {
-  const line2 = document.querySelector('li[data-id="' + currentItem + '"] span');
-  
-  line2.innerText = popupInput.value;
-  modalClosed();
 }
 
 

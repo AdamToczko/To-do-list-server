@@ -1,6 +1,8 @@
 body {
     margin: 0;
     min-width: 250px;
+    
+    background-color: rgba(4, 207, 55, 0.1);
   }
   
   /* Include the padding and border in an element's total width and height */
@@ -147,3 +149,47 @@ body {
   }
 }
 
+#list {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 20px;
+  line-height: 30px;
+  list-style: none;
+}
+
+
+form {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 24px;
+}
+
+.styling {
+  background-color: gold;
+  margin-left: 20%;
+  margin-right: 20%;
+  font-size: 30px;
+  line-height: 36px;
+  display: inline-block;
+
+}
+
+button {
+  color: crimson;
+  background-color: rgba(143, 189, 233, 0.4);
+  width:12%;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px;
+  border: black solid 2px;
+  border-radius: 40%;
+  margin: 5px;
+}
+
+input {
+  background-color: gold;
+  font-size: 24px;
+  line-height: 34px;
+}

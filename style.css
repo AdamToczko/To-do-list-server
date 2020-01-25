@@ -2,7 +2,10 @@ body {
     margin: 0 auto;
     min-width: 250px;
     
-    background-color: rgba(4, 207, 55, 0.1);
+  }
+
+  .wrapper {
+    background-color: rgba(201, 157, 106, 0.5); 
   }
   
   /* Include the padding and border in an element's total width and height */
@@ -195,6 +198,7 @@ input {
 } */
 
 .header__form {
+  margin-top: 20px;
   width: 800px;
   height: 300px;
   background-size: cover;
@@ -203,10 +207,37 @@ input {
   padding: 25px;
 }
 
-
-
 .spacer20 {
   height: 20px;
+}
+
+/* Text Animation */
+div.slider {
+  position: relative;
+  top:10%;
+  height: 50px;
+  margin-left: 30%;
+  /* padding-left:15px; */
+  overflow: hidden;
+}
+
+div.slider-text1  {
+  height: 50px;
+  color: #000;
+  animation: slide 4s ease-in-out;
+  font-size: 1.2em;
+}
+
+@keyframes slide {
+  from {
+    margin-left: 100%;
+    width: 300%; 
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
 }
 
 @media only screen and (max-width: 800px) {

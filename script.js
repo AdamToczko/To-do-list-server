@@ -35,7 +35,7 @@ function prepareDOMElements() {
 function prepareDOMEvents() {
   // Przygotowanie listenerów
   list.addEventListener('click', listClickManager);
-  addItem.addEventListener('click', addNewElementToList);
+  // addItem.addEventListener('click', addNewElementToList);
   form.addEventListener('submit', addNewItemViaForm);
   modalClose.addEventListener('click', modalClosed);
   modalClose2.addEventListener('click', modalClosed2);

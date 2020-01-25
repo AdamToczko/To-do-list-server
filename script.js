@@ -47,8 +47,7 @@ function addNewItemViaForm (e) {
 
 function addNewTodo() {
   if (mainInput.value.trim() !== ''){
-    // addNewElementToList(mainInput.value);
-    // mainInput.value = '';
+
     axios.post('http://195.181.210.249:3000/todo/', {title: mainInput.value})
       .then(function (response) {
       if (response.status === 200) {
@@ -75,14 +74,6 @@ function getTodosFromServer () {
   });
 }
 
-
-// function removeListElement(event) {
-//   // const line = document.querySelector('li[data-id="' + currentItem + '"]');
-//   // list.removeChild(line); 
-//   //tu sie trzeba odwolac do czesci serwerowej 
-//   event.target.parentElement.querySelector('li').id
-  
-
 function removeTodos () {
   axios.delete(`http://195.181.210.249:3000/todo/${currentItem}`)
   .then(function () { 
@@ -97,13 +88,8 @@ function editListElement(event) {
   text = document.querySelector('li[data-id="' + currentItem + '"] span').textContent;
   popupInput.value = text; 
   
-  // editTodos(currentItem);
 }
 
-// function editTodos() {
-//   const line = document.querySelector('li[data-id="' + currentItem + '"]');
-  
-//   };
 
   function editAccept () {
     const line2 = document.querySelector('li[data-id="' + currentItem + '"] span');
@@ -116,11 +102,11 @@ function editListElement(event) {
   }
 
 
-// MARK AS DONE W WERSJI NIE SERWEROWEJ 
+// MARK AS DONE Without server
 function markAsDone() {
   const line3 = document.querySelector('li[data-id="' + currentItem + '"] span');
-  line3.classList.add('listCompleted'); //TO CZESC NIE SERWEROWA  
- //tu sie trzeba polaczyc jakos z funkcja serwerowa ponizej ??
+  line3.classList.add('listCompleted'); 
+ 
   
 }
 
@@ -146,7 +132,6 @@ function hideLoader () {
 
 
 function addNewElementToList(title, id, extra) {
-  //obsługa dodawanie elementów do listy
   
   const newElement = createElement(title, id, extra);
   list.appendChild(newElement);
@@ -156,8 +141,7 @@ function addNewElementToList(title, id, extra) {
 
 
 function createElement(title, id, extra) {
-  // Tworzyc reprezentacje DOM elementu return newElement
-  // currentId++; czesc nie serwerowa 
+ 
 
   const newElement = document.createElement('li');
   newElement.dataset.id = id;
@@ -167,31 +151,30 @@ function createElement(title, id, extra) {
   newElement.appendChild(titleElement);
   
 
-  const newButton = document.createElement('button'); // tworzymy nowy button
-  newButton.innerHTML = 'edytuj'; // dodajemy napis w buttonie 'edytuj'
+  const newButton = document.createElement('button'); 
+  newButton.innerHTML = 'edytuj'; 
   newButton.classList.add('edit')
-  newElement.appendChild(newButton);  // dodajemy przycisk do naszej komórki   
+  newElement.appendChild(newButton);   
   
-  const newButton2 = document.createElement('button'); // tworzymy nowy button
-  newButton2.innerHTML = 'usuń'; // dodajemy napis w buttonie 'delete'
+  const newButton2 = document.createElement('button'); 
+  newButton2.innerHTML = 'usuń'; 
   newButton2.classList.add('delete')
-  newElement.appendChild(newButton2);  // dodajemy przycisk do naszej komórki
+  newElement.appendChild(newButton2);  
   
-  const newButton3 = document.createElement('button'); // tworzymy nowy button
-  newButton3.innerHTML = 'wykonane'; // dodajemy napis w buttonie 'wykonane'
+  const newButton3 = document.createElement('button'); 
+  newButton3.innerHTML = 'wykonane'; 
   newButton3.classList.add('done')
-  newElement.appendChild(newButton3);  // dodajemy przycisk do naszej komórki  
+  newElement.appendChild(newButton3);  
 
    return newElement;
-//   if (extra == true) {
-//     newList.classList.add('listCompleted');  //CZY TAK JAK BY SIE UDALO USTAWIC MARKED?
-// }
+
+
 }
  
 
 
 function listClickManager(event) {
-  // Rozstrzygnięcie co dokładnie zostało kliknięte i wywołanie odpowiedniej funkcji
+  
  
   currentItem = event.target.parentElement.dataset.id;
   if (event.target.className === 'delete') {

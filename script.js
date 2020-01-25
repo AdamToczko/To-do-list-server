@@ -1,4 +1,4 @@
-// Tutaj dodacie zmienne globalne do przechowywania elementów takich jak np. lista czy input do wpisywania nowego todo
+
 let list;
 const initialList = ['Dzisiaj robię usuwanie', 'Nakarm psa'];
 let modal;
@@ -8,19 +8,18 @@ let editList;
 let mainInput;
 let addItem;
 let form;
-// let currentId = 0;
+
 let currentItem;
 let loader;
 
 function main() {
   prepareDOMElements();
   prepareDOMEvents();
-  // prepareInitialList(); nie potrzebne na serwerze
   getTodosFromServer();
 }
 
 function prepareDOMElements() {
-  // To będzie idealne miejsce do pobrania naszych elementów z drzewa DOM i zapisanie ich w zmiennych
+  
   list = document.getElementById('list');
   modal = document.querySelector(".modal");
   modalClose = document.querySelector(".close"); 
@@ -33,9 +32,8 @@ function prepareDOMElements() {
 }
 
 function prepareDOMEvents() {
-  // Przygotowanie listenerów
+  
   list.addEventListener('click', listClickManager);
-  // addItem.addEventListener('click', addNewElementToList);
   form.addEventListener('submit', addNewItemViaForm);
   modalClose.addEventListener('click', modalClosed);
   modalClose2.addEventListener('click', modalClosed2);
@@ -59,21 +57,12 @@ function addNewTodo() {
   });
   }
   
-  
 }
 
 
-// DO CZESCI BEZ SERVERA
-// function prepareInitialList() {
-//   // Tutaj utworzymy sobie początkowe todosy. Mogą pochodzić np. z tablicy
-//   initialList.forEach(todo => {
-//     addNewElementToList(todo);
-//   });
-// } 
-
 function getTodosFromServer () {
   showLoader();
-  
+  list.innerHTML = ""; //cleaning added when reloading list after new element added
   axios.get('http://195.181.210.249:3000/todo/')
   .then(function (response) {
     response.data.forEach(function(todo) {
@@ -93,10 +82,6 @@ function getTodosFromServer () {
 //   //tu sie trzeba odwolac do czesci serwerowej 
 //   event.target.parentElement.querySelector('li').id
   
-// #\34 69 
-// #\34 63
-// document.querySelector("#\\34 69")
-// } #\35 32
 
 function removeTodos () {
   axios.delete(`http://195.181.210.249:3000/todo/${currentItem}`)

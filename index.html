@@ -10,30 +10,43 @@
   <body>
     <form id="addForm" class="header">
         <div class="container">
-          <div class="col-6 offset-2">
+          <div class="col-sm-6 offset-2">
             <div class="col">
               <div class="header__form">
               </div>
             </div>
           </div>
           <div class="spacer20"></div>
-          <div class="row justify-content-center">
-            <div class="col-3">
+        </div>
+        <div class="container">  
+          <div class="row justify-content-md-center">
+              
+            <div class="input-group col-sm-6 col-md-3 ">
+                
                 <input type="text" id="myInput" placeholder="Title...">
-            </div>
-            <div class="col-3">
-                <button id="addTodo">Add</button>
-            </div>
+              </div>
+              <div class=" col-sm-6 col-md-3">
+                  <button id="addTodo" class="btn btn-primary">Add new task</button>
+                  
+              </div>
           </div>
         </div>
       
+        
+       
+    </div>
+   
+
+
       
     </div>
     </form>
-      
-    <ul id="list">
-    </ul>
-
+    <div class="container">
+        <div class="row justify-content-center">
+          <ul id="list">
+          </ul>
+        </div>
+    </div>
     <div id="myModal" class="modal">
 
       <!-- Modal content -->

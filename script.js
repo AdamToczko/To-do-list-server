@@ -46,8 +46,9 @@ function addNewItemViaForm (e) {
 
 function addNewTodo() {
   if (mainInput.value.trim() !== ''){
-
-    axios.post('http://195.181.210.249:3000/todo/', {title: mainInput.value})
+    createElement(title, id, extra)
+    axios.post('http://195.181.210.249:3000/todo/', 
+    {title: mainInput.value})
       .then((response) => {
       if (response.status === 200) {
       getTodosFromServer();
@@ -77,8 +78,8 @@ function getTodosFromServer () {
 function removeTodos () {
   axios.delete(`http://195.181.210.249:3000/todo/${currentItem}`)
   .then(() =>{ 
-    const line = document.querySelector('li[data-id="' + currentItem + '"]');
-    list.removeChild(line); 
+    const removeItem = document.querySelector('li[data-id="' + currentItem + '"]');
+    list.removeChild(removeItem); 
 });
 }
 
@@ -92,11 +93,11 @@ function editListElement(event) {
 
 
   function editAccept () {
-    const line2 = document.querySelector('li[data-id="' + currentItem + '"] span');
+    const editSelect = document.querySelector('li[data-id="' + currentItem + '"] span');
     const title = popupInput.value;
     axios.put(`http://195.181.210.249:3000/todo/${currentItem}`, { title })
   .then(() => { 
-    line2.innerText = title
+    editSelect.innerText = title
   })
   modal.style.display = "none";
   }
@@ -104,16 +105,15 @@ function editListElement(event) {
 
 // MARK AS DONE Without server
 function markAsDone() {
-  const line3 = document.querySelector('li[data-id="' + currentItem + '"] span');
-  line3.classList.add('listCompleted'); 
+  const markCompleted = document.querySelector('li[data-id="' + currentItem + '"] span');
+  markCompleted.classList.add('listCompleted'); 
  
   
 }
 
-
-// function markToDoAsDoneToServer (id) {
-//   axios.put('http://195.181.210.249:3000/todo/' + id, 
-// {extra: true})
+//  function markToDoAsDoneToServer (id) {
+//    axios.put('http://195.181.210.249:3000/todo/' + id, 
+//  {extra: listCompleted ? ''})
 //    .then(function () { 
 //       list.innerHTML = '';
 //       getTodosFromServer();

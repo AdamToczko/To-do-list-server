@@ -52,6 +52,7 @@ function addNewTodo() {
       .then(function (response) {
       if (response.status === 200) {
       getTodosFromServer();
+      mainInput.value = '';
     }
   });
   }
@@ -152,19 +153,19 @@ function createElement(title, id, extra) {
   
 
   const newButton = document.createElement('button'); 
-  newButton.innerHTML = 'edytuj'; 
+  newButton.innerHTML = 'EDIT'; 
   newButton.classList.add('edit')
   newButton.classList.add('btn-primary')
   newElement.appendChild(newButton);   
   
   const newButton2 = document.createElement('button'); 
-  newButton2.innerHTML = 'usuń'; 
+  newButton2.innerHTML = 'DELETE'; 
   newButton2.classList.add('delete')
   newButton2.classList.add('btn-danger')
   newElement.appendChild(newButton2);  
   
   const newButton3 = document.createElement('button'); 
-  newButton3.innerHTML = 'wykonane'; 
+  newButton3.innerHTML = 'DONE'; 
   newButton3.classList.add('done')
   newButton3.classList.add('btn-light')
   newElement.appendChild(newButton3);  

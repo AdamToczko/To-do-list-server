@@ -44,7 +44,7 @@ function addNewItemViaForm (e) {
   addNewTodo();
 }
 
-function addNewTodo() {
+function addNewTodo(title,id,extra) {
   if (mainInput.value.trim() !== ''){
     createElement(title, id, extra)
     axios.post('http://195.181.210.249:3000/todo/', 
@@ -56,9 +56,7 @@ function addNewTodo() {
     }
   });
   }
-  
 }
-
 
 function getTodosFromServer () {
   showLoader();
@@ -75,6 +73,65 @@ function getTodosFromServer () {
   });
 }
 
+function addNewElementToList(title, id, extra) {
+  const newElement = createElement(title, id, extra);
+  list.appendChild(newElement);
+}
+
+function createElement(title, id, extra) {
+ 
+  let newElement = document.createElement('li');
+  newElement.dataset.id = id;
+  const titleElement = document.createElement('div');
+  titleElement.innerText = title;
+  titleElement.classList.add('styling')
+  newElement.appendChild(titleElement);
+  
+
+  const divBtns = document.createElement('div');
+  divBtns.classList.add('btns')
+  newElement.appendChild(divBtns)
+
+  const newButton = document.createElement('button'); 
+  newButton.innerHTML = 'EDIT'; 
+  newButton.classList.add('edit','btn','btn-primary')
+  divBtns.appendChild(newButton);  
+  
+  const newButton2 = document.createElement('button'); 
+  newButton2.innerHTML = 'DELETE'; 
+  newButton2.classList.add('delete','btn','btn-danger')
+  divBtns.appendChild(newButton2); 
+  
+  const newButton3 = document.createElement('button'); 
+  newButton3.innerHTML = 'DONE'; 
+  newButton3.classList.add('done','btn','btn-secondary')
+  divBtns.appendChild(newButton3); 
+
+  return newElement;
+
+  //   if (extra) {
+//     newElement.classList.add('listCompleted');
+//     return newElement;
+// } 
+
+}
+ 
+
+function listClickManager(event) {
+  
+ 
+  currentItem = event.target.parentElement.parentElement.dataset.id;
+  if (event.target.className === 'delete btn btn-danger') {
+    removeTodos ();
+  } else if (event.target.className === 'edit btn btn-primary'){
+      editListElement();
+  } else if (event.target.className === 'done btn btn-secondary') {
+      markAsDone();
+  }
+}
+
+
+
 function removeTodos () {
   axios.delete(`http://195.181.210.249:3000/todo/${currentItem}`)
   .then(() =>{ 
@@ -86,14 +143,14 @@ function removeTodos () {
 
 function editListElement(event) {
   openPopup();
-  text = document.querySelector('li[data-id="' + currentItem + '"] span').textContent;
+  text = document.querySelector('li[data-id="' + currentItem + '"] div').textContent;
   popupInput.value = text; 
   
 }
 
 
   function editAccept () {
-    const editSelect = document.querySelector('li[data-id="' + currentItem + '"] span');
+    const editSelect = document.querySelector('li[data-id="' + currentItem + '"] div');
     const title = popupInput.value;
     axios.put(`http://195.181.210.249:3000/todo/${currentItem}`, { title })
   .then(() => { 
@@ -103,23 +160,25 @@ function editListElement(event) {
   }
 
 
-// MARK AS DONE Without server
-function markAsDone() {
-  const markCompleted = document.querySelector('li[data-id="' + currentItem + '"] span');
-  markCompleted.classList.add('listCompleted'); 
- 
-  
-}
+ //MARK AS DONE Without server
+ function markAsDone() {
+ const markCompleted = document.querySelector('li[data-id="' + currentItem + '"] div');
+markCompleted.classList.add('listCompleted'); 
+//  const markCompleted2 = markCompleted.classList.toggle('listCompleted')
+//  markToDoAsDoneToServer(markCompleted.id, markCompleted2)
+ }
 
 //  function markToDoAsDoneToServer (id) {
 //    axios.put('http://195.181.210.249:3000/todo/' + id, 
-//  {extra: listCompleted ? ''})
-//    .then(function () { 
+//   {extra: true})
+//    .then(() => { 
 //       list.innerHTML = '';
 //       getTodosFromServer();
 //   }
 // )
 // }
+
+
 
 function showLoader () {
   loader.classList.add('loaderBoxShow');
@@ -128,64 +187,6 @@ function showLoader () {
 function hideLoader () {
   loader.classList.remove('loaderBoxShow');
 }
-
-
-
-function addNewElementToList(title, id, extra) {
-  
-  const newElement = createElement(title, id, extra);
-  list.appendChild(newElement);
-  
-
-}
-
-
-function createElement(title, id, extra) {
- 
-
-  const newElement = document.createElement('li');
-  newElement.dataset.id = id;
-  const titleElement = document.createElement('span');
-  titleElement.innerText = title;
-  titleElement.classList.add('styling')
-  newElement.appendChild(titleElement);
-  
-
-  const newButton = document.createElement('button'); 
-  newButton.innerHTML = 'EDIT'; 
-  newButton.classList.add('edit','btn','btn-primary')
-  newElement.appendChild(newButton);   
-  
-  const newButton2 = document.createElement('button'); 
-  newButton2.innerHTML = 'DELETE'; 
-  newButton2.classList.add('delete','btn','btn-danger')
-  newElement.appendChild(newButton2);  
-  
-  const newButton3 = document.createElement('button'); 
-  newButton3.innerHTML = 'DONE'; 
-  newButton3.classList.add('done','btn','btn-secondary')
-  newElement.appendChild(newButton3);  
-
-   return newElement;
-
-
-}
- 
-
-
-function listClickManager(event) {
-  
- 
-  currentItem = event.target.parentElement.dataset.id;
-  if (event.target.className === 'delete btn btn-danger') {
-    removeTodos ();
-  } else if (event.target.className === 'edit btn btn-primary'){
-      editListElement();
-  } else if (event.target.className === 'done btn btn-secondary') {
-      markAsDone();
-  }
-}
-
 
 
 function openPopup() {

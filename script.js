@@ -1,6 +1,5 @@
 
 let list;
-const initialList = ['Dzisiaj robię usuwanie', 'Nakarm psa'];
 let modal;
 let modalClose; 
 let modalClose2;
@@ -49,7 +48,7 @@ function addNewTodo() {
   if (mainInput.value.trim() !== ''){
 
     axios.post('http://195.181.210.249:3000/todo/', {title: mainInput.value})
-      .then(function (response) {
+      .then((response) => {
       if (response.status === 200) {
       getTodosFromServer();
       mainInput.value = '';
@@ -64,20 +63,20 @@ function getTodosFromServer () {
   showLoader();
   list.innerHTML = ""; //cleaning added when reloading list after new element added
   axios.get('http://195.181.210.249:3000/todo/')
-  .then(function (response) {
-    response.data.forEach(function(todo) {
+  .then((response) =>  {
+    response.data.forEach((todo) => {
       addNewElementToList(todo.title, todo.id, todo.extra);
     });
-  }).catch(function (e) {
+  }).catch((e) => {
     console.log(`mamy error: ${e}`);
-  }).finally(function () {
+  }).finally(() => {
     hideLoader(); 
   });
 }
 
 function removeTodos () {
   axios.delete(`http://195.181.210.249:3000/todo/${currentItem}`)
-  .then(function () { 
+  .then(() =>{ 
     const line = document.querySelector('li[data-id="' + currentItem + '"]');
     list.removeChild(line); 
 });
@@ -96,7 +95,7 @@ function editListElement(event) {
     const line2 = document.querySelector('li[data-id="' + currentItem + '"] span');
     const title = popupInput.value;
     axios.put(`http://195.181.210.249:3000/todo/${currentItem}`, { title })
-  .then(function () { 
+  .then(() => { 
     line2.innerText = title
   })
   modal.style.display = "none";
@@ -164,7 +163,7 @@ function createElement(title, id, extra) {
   
   const newButton3 = document.createElement('button'); 
   newButton3.innerHTML = 'DONE'; 
-  newButton3.classList.add('done','btn','btn-light')
+  newButton3.classList.add('done','btn','btn-secondary')
   newElement.appendChild(newButton3);  
 
    return newElement;
@@ -182,7 +181,7 @@ function listClickManager(event) {
     removeTodos ();
   } else if (event.target.className === 'edit btn btn-primary'){
       editListElement();
-  } else if (event.target.className === 'done btn btn-light') {
+  } else if (event.target.className === 'done btn btn-secondary') {
       markAsDone();
   }
 }

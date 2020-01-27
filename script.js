@@ -154,16 +154,19 @@ function createElement(title, id, extra) {
   const newButton = document.createElement('button'); 
   newButton.innerHTML = 'edytuj'; 
   newButton.classList.add('edit')
+  newButton.classList.add('btn-primary')
   newElement.appendChild(newButton);   
   
   const newButton2 = document.createElement('button'); 
   newButton2.innerHTML = 'usuń'; 
   newButton2.classList.add('delete')
+  newButton2.classList.add('btn-danger')
   newElement.appendChild(newButton2);  
   
   const newButton3 = document.createElement('button'); 
   newButton3.innerHTML = 'wykonane'; 
   newButton3.classList.add('done')
+  newButton3.classList.add('btn-light')
   newElement.appendChild(newButton3);  
 
    return newElement;
@@ -177,11 +180,11 @@ function listClickManager(event) {
   
  
   currentItem = event.target.parentElement.dataset.id;
-  if (event.target.className === 'delete') {
+  if (event.target.className === 'delete btn-danger') {
     removeTodos ();
-  } else if (event.target.className === 'edit'){
+  } else if (event.target.className === 'edit btn-primary'){
       editListElement();
-  } else if (event.target.className === 'done') {
+  } else if (event.target.className === 'done btn-light') {
       markAsDone();
   }
 }

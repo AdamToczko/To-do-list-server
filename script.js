@@ -84,12 +84,12 @@ function createElement(title, id, extra) {
   newElement.dataset.id = id;
   const titleElement = document.createElement('div');
   titleElement.innerText = title;
-  titleElement.classList.add('styling')
+  titleElement.classList.add('task-style')
   newElement.appendChild(titleElement);
   
 
   const divBtns = document.createElement('div');
-  divBtns.classList.add('btns')
+  divBtns.classList.add('buttons-style')
   newElement.appendChild(divBtns)
 
   const newButton = document.createElement('button'); 

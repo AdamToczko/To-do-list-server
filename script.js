@@ -67,7 +67,11 @@ function getTodosFromServer () {
       addNewElementToList(todo.title, todo.id, todo.extra);
     });
   }).catch((e) => {
-    console.log(`mamy error: ${e}`);
+    console.log(`mamy error: ${e}`)
+    const message = document.getElementById('errorMessage')
+    message.classList.add('error')
+    message.innerText = `Failed to load data: ${e}`
+    
   }).finally(() => {
     hideLoader(); 
   });
@@ -94,17 +98,17 @@ function createElement(title, id, extra) {
 
   const newButton = document.createElement('button'); 
   newButton.innerHTML = 'EDIT'; 
-  newButton.classList.add('edit','btn','btn-primary')
+  newButton.classList.add('edit','btn','btn-primary','btn-sm')
   divBtns.appendChild(newButton);  
   
   const newButton2 = document.createElement('button'); 
   newButton2.innerHTML = 'DELETE'; 
-  newButton2.classList.add('delete','btn','btn-danger')
+  newButton2.classList.add('delete','btn','btn-danger','btn-sm')
   divBtns.appendChild(newButton2); 
   
   const newButton3 = document.createElement('button'); 
   newButton3.innerHTML = 'DONE'; 
-  newButton3.classList.add('done','btn','btn-secondary')
+  newButton3.classList.add('done','btn','btn-secondary','btn-sm')
   divBtns.appendChild(newButton3); 
 
   return newElement;
@@ -121,11 +125,11 @@ function listClickManager(event) {
   
  
   currentItem = event.target.parentElement.parentElement.dataset.id;
-  if (event.target.className === 'delete btn btn-danger') {
+  if (event.target.className === 'delete btn btn-danger btn-sm') {
     removeTodos ();
-  } else if (event.target.className === 'edit btn btn-primary'){
+  } else if (event.target.className === 'edit btn btn-primary btn-sm'){
       editListElement();
-  } else if (event.target.className === 'done btn btn-secondary') {
+  } else if (event.target.className === 'done btn btn-secondary btn-sm') {
       markAsDone();
   }
 }

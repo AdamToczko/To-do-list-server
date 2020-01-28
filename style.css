@@ -184,6 +184,12 @@ body {
   right: 12%;
 }
 
+.error {
+    text-align: center;
+    color: red;
+    font-size: 30px;
+}
+
 /*
 form {
   width: 80%;

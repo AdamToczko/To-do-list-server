@@ -168,8 +168,7 @@ body {
   width: 80%;
   margin: 0 auto;
   text-align: center;
-  font-size: 30px;
-  line-height: 30px;
+  font-size: 24px;
   list-style: none;
   padding: 5%;
 }
@@ -187,7 +186,7 @@ body {
 }
 
 .task-style {
-  width: 50%;
+  width: 60%;
   display: inline-block;
   position: relative;
   right: 12%;

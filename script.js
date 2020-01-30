@@ -154,11 +154,11 @@ function editListElement(event) {
 
 
   function editAccept () {
-    const editSelect = document.querySelector('li[data-id="' + currentItem + '"] div');
+    const editSelected = document.querySelector('li[data-id="' + currentItem + '"] div');
     const title = popupInput.value;
     axios.put(`http://195.181.210.249:3000/todo/${currentItem}`, { title })
   .then(() => { 
-    editSelect.innerText = title
+    editSelected.innerText = title
   })
   modal.style.display = "none";
   }

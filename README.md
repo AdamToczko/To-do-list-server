@@ -16,7 +16,6 @@ and following libraries and frameworks:
 * bootstrap
 * axios 
 
-live demo https://adamtoczko.github.io/To-do-list-server/
 
 
 

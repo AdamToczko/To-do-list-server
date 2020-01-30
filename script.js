@@ -70,7 +70,7 @@ function getTodosFromServer () {
     console.log(`mamy error: ${e}`)
     const message = document.getElementById('errorMessage')
     message.classList.add('error')
-    message.innerText = `Failed to load data: ${e}`
+    message.innerText = `Failed to: ${e}`
     
   }).finally(() => {
     hideLoader(); 
@@ -154,11 +154,11 @@ function editListElement(event) {
 
 
   function editAccept () {
-    const editSelected = document.querySelector('li[data-id="' + currentItem + '"] div');
+    const editSelect = document.querySelector('li[data-id="' + currentItem + '"] div');
     const title = popupInput.value;
     axios.put(`http://195.181.210.249:3000/todo/${currentItem}`, { title })
   .then(() => { 
-    editSelected.innerText = title
+    editSelect.innerText = title
   })
   modal.style.display = "none";
   }
